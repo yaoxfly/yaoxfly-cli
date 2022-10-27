@@ -1,6 +1,6 @@
 {
   "name": "@yaoxfly/cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "脚手架工具，开箱即用",
   "main": "bin",
   "private": false,
@@ -10,6 +10,7 @@
     "dev": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.ts, --fix",
+    "prepublishOnly": "node ./bin/version.js",
     "publish": "npm version patch -f"
   },
   "bin": {
@@ -17,7 +18,8 @@
   },
   "files": [
     "bin",
-    "template.json"
+    "template.json",
+    "version.json"
   ],
   "publishConfig": {
     "access": "public"

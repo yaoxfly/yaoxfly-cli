@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import { create } from './create'
 const program = new Command()
 program
-  .version(require('../package').version)
+  .version(require('../version').version)
   .name('yx-cli')
 
 program
@@ -14,8 +14,6 @@ program
   .action((projectName: string, options: any) => {
     create(projectName, options)
   })
-
-
 program.on('--help', () => {
   console.log(`\r\n Run ${chalk.green(`yx-cli <command> --help`,)} to understand the details\r\n `)
 })

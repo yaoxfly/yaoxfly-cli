@@ -1,22 +1,38 @@
 {
   "name": "@yaoxfly/cli",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.0.2",
+  "description": "脚手架工具，开箱即用",
+  "main": "bin",
+  "private": false,
+  "author": "yaoxfly",
+  "license": "MIT",
   "scripts": {
     "dev": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .js,.ts, --fix"
+    "lint": "eslint . --ext .js,.ts, --fix",
+    "publish": "npm version patch -f"
   },
   "bin": {
     "yx-cli": "./bin/index.js"
   },
   "files": [
-    "bin"
+    "bin",
+    "template.json"
   ],
-  "keywords": [],
-  "author": "yaoxfly",
-  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "cli",
+    "yaoxfly",
+    "vue",
+    "vitepress",
+    "vite"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yaoxfly/yaoxfly-cli.git"
+  },
   "devDependencies": {
     "@types/node": "^18.8.5",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
@@ -28,6 +44,7 @@
     "chalk": "4.1.2",
     "commander": "9.4.1",
     "download-git-repo": "3.0.2",
+    "fs-extra": "10.1.0",
     "inquirer": "8.0.0",
     "log-symbols": "4.0.0",
     "ora": "5.2.0"

@@ -1,6 +1,6 @@
 {
   "name": "@yaoxfly/cli",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "脚手架工具，开箱即用",
   "main": "bin",
   "private": false,

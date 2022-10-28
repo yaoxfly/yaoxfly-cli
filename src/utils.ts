@@ -1,7 +1,7 @@
-import {PathOrFileDescriptor,readFileSync} from 'fs'
+import { PathOrFileDescriptor, readFileSync } from 'fs'
 import ora from 'ora'
 import { exec } from 'child_process'
-import path  from 'path'
+import path from 'path'
 /**@description 读取文件,并解析JSON。
  * @author yx
  * @param  {String}  filePath 文件路径
@@ -32,18 +32,17 @@ type Config = {
 export const shellExec = (config: Config) => {
   const { directive, cwd, loading, log } = config || {}
   return new Promise((resolve, reject) => {
-    console.log(`\n ${log} \n`)
+    log && console.log(`\n ${log} \n`)
     const spinner = ora(loading);
-    spinner.start();
+    loading && spinner.start();
     exec(directive, { cwd }, (error, stdout) => {
       if (error) {
-        spinner.fail();
-        console.error(error);
+        loading && spinner.fail();
         reject(error)
         return;
       }
       resolve(stdout)
-      spinner.succeed();
+      loading && spinner.succeed();
     });
   })
 }

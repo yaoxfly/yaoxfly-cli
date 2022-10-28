@@ -1,25 +1,26 @@
+#!/usr/bin/env node
 import inquirer from 'inquirer'
 import chalk from 'chalk'
 import fs from 'fs'
 import ora from 'ora'
 import download from 'download-git-repo'
 import symbols from 'log-symbols';
-import  fse  from 'fs-extra'
-import {readFile,shellExec,resolve}  from './utils'
+import fse from 'fs-extra'
+import { readFile, shellExec, resolve } from './utils'
 
-type Tips={
-  projectName?:string
-  install?:boolean,
-  installMode?:string
- }
+type Tips = {
+  projectName?: string
+  install?: boolean,
+  installMode?: string
+}
 
-const tips = (param:Tips) => {
-  const { install, installMode='pnpm',projectName } = param || {}
+const tips = (param: Tips) => {
+  const { install, installMode = 'pnpm', projectName } = param || {}
   console.log(symbols.success, chalk.green('The project is initialized'));
   console.log('\n To get started')
   console.log(`\n cd ${projectName}`)
   !install && console.log(`\n ${installMode} install`)
-  console.log(`\n ${installMode==='yarn' ?  'yarn dev': `${installMode} run dev`} `)
+  console.log(`\n ${installMode === 'yarn' ? 'yarn dev' : `${installMode} run dev`} `)
 }
 
 export const create = async (projectName: string, options: any) => {
@@ -85,7 +86,7 @@ export const create = async (projectName: string, options: any) => {
   console.log(chalk.white('\n Start generating... \n'))
   const spinner = ora("Downloading...");
   spinner.start();
-  
+
   download(
     url,
     projectName,
@@ -99,7 +100,7 @@ export const create = async (projectName: string, options: any) => {
 
       const meta = {
         description: description,
-        name: projectName.replace(/\/|\\/g,'-'),
+        name: projectName.replace(/\/|\\/g, '-'),
         author: author
       }
       const filePath = `${projectName}/package.json`;
@@ -116,10 +117,10 @@ export const create = async (projectName: string, options: any) => {
           log: `${installMode} install`
         })
         console.log(stdout);
-        tips({projectName, install, installMode })
+        tips({ projectName, install, installMode })
         return
       }
-      tips( {projectName, install, installMode })
+      tips({ projectName, install, installMode })
     }
   )
 }

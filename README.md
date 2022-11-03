@@ -2,6 +2,10 @@
 干净极简的项目脚手架集成了`vue3`项目模板，`vitepress`项目模板等，开箱即用。
 
 
+> 兼容性注意:
+脚手架内部默认使用了`Vite`，`Vite` 需要 `Node.js` 版本 `14.18+`，`16+`。然而，有些模板需要依赖更高的`Node` 版本才能正常运行，当你的包管理器发出警告时，请注意升级你的`Node`版本。[node版本切换](#node版本切换)
+
+
 # 使用 npx
 
 无感知下载模板，无需安装`@yaoxfly/cli`。
@@ -123,4 +127,29 @@ registry= https://registry.npmmirror.com/
 ```
 
 
+# node版本切换
+
+#### 使用`nvm`来管理你的`node`版本
+
+[nvm下载地址](https://github.com/coreybutler/nvm-windows/releases)
+
+
+下载 `nvm-setup.zip`版本，根据提示安装即可。
+
+#### 下载node：
+
+使用`nvm`命令行安装`node`时，当`node`版本为`8`以上时，`nvm`将不会安装`npm`。
+
+自行在[nodejs下载网站](https://registry.npmmirror.com/binary.html?path=node)下载对应版本`zip`文件，将其解压至`nvm`安装目录的根目录下，将解压后的文件夹名 改为 `v版本号`
+例如：解压后的文件夹名：`node-v16.13.1-win-x64` 改为：`v16.13.1`完成。
+
+查看已经下载的`node`版本
+```
+nvm list
+```
+
+使用对应的版本
+```
+nvm use [版本号]
+```
 

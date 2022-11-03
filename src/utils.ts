@@ -1,6 +1,6 @@
 import { PathOrFileDescriptor, readFileSync } from 'fs'
 import ora from 'ora'
-import { exec } from 'child_process'
+import { exec, execSync} from 'child_process'
 import path from 'path'
 /**@description 读取文件,并解析JSON。
  * @author yx
@@ -53,3 +53,24 @@ export const shellExec = (config: Config) => {
  * @param  {string}  file 可多个路径
  */
 export const resolve = (...file) => path.resolve(__dirname, ...file)
+
+
+/**@description 是否有安装某个工具
+ * @author yx
+ * @example 
+ * cosnt has =hasPackage()
+ * has('git')
+   })
+ */
+
+export const hasPackage= ()=>{
+  const fn=(tool:string)=>{
+    try {
+      execSync(`${tool} --version`, { stdio: 'ignore' })
+      return  true
+    } catch (e) {
+      return false
+    }
+  }
+  return fn
+}

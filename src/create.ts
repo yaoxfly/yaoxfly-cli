@@ -6,8 +6,8 @@ import ora from 'ora'
 import download from 'download-git-repo'
 import symbols from 'log-symbols';
 import fse from 'fs-extra'
-import { readFile, shellExec, resolve } from './utils'
-
+import { readFile, shellExec, resolve, hasPackage } from './utils'
+import { execSync} from 'child_process'
 type Tips = {
   projectName?: string
   install?: boolean,
@@ -23,19 +23,43 @@ const tips = (param: Tips) => {
   console.log(`\n ${installMode === 'yarn' ? 'yarn dev' : `${installMode} run dev`} `)
 }
 
+const has=hasPackage()
+const iMode =()=>{
+  if(has('pnpm')) return 'pnpm'
+  if(has('yarn')) return 'yarn'
+  return 'npm'
+}
+
 export const create = async (projectName: string, options: any) => {
+  if(!has('git')){
+    console.log(chalk.red("Error, Git is not exsits ,please install git!"))
+    return 
+  }
+
+  if(has('node')){
+   let nodeVersion:string | number=  execSync(`node --version`).toString()
+   nodeVersion=  nodeVersion.substring(1,nodeVersion.length)
+   nodeVersion=parseInt(nodeVersion.split('.').join('').substring(0,4)) 
+   if(nodeVersion<1418){ //与vite版本兼容一致
+    console.log(chalk.red("Error, node version must be at least v14.18.0!"))
+    return
+   }
+  }
+  
   const { force } = options || {}
   if (!force && fs.existsSync(projectName)) {
     console.log(chalk.red("Error, In this directory, the project name already exsits !"))
     console.log(chalk.green('You can use option -f to force delete the directory except for direct mode !'));
     return
   }
+
   const template = import(resolve('../template'))
   const templateObj = await template
   const choices = []
   Object.keys(templateObj.default).forEach(key => {
     choices.push(`${key} (${templateObj.default[key].description})`)
   })
+
   const param = [
     {
       type: 'list',
@@ -64,7 +88,7 @@ export const create = async (projectName: string, options: any) => {
       type: 'list',
       message: '请选择一个安装方式',
       name: 'installMode',
-      default: 'pnpm',
+      default: iMode(),
       choices: ['pnpm', 'npm', 'yarn'],
       when: (answers) => {
         const { install } = answers

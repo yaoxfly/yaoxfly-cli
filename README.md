@@ -1,155 +1,164 @@
+[English](README.md) | [中文](README-CN.md)
+
 # @yaoxfly/cli
-干净极简的项目脚手架集成了`vue3`项目模板，`vitepress`项目模板等，开箱即用。
+
+Clean and minimalist project scaffolding integrates`vue3` project templates,`vitepress ` project templates, etc., right out of the box.
+
+> Compatibility note: The scaffolding uses `Vite` internally by default,`Vite` requires `Node.js` version ` 14.18+ `, `16+`. However, some templates rely on a higher version of `Node` to function properly, so be careful to upgrade your version of 'Node' when your package manager warns you.  [node version switch](#node-version-switch)
 
 
-> 兼容性注意:
-脚手架内部默认使用了`Vite`，`Vite` 需要 `Node.js` 版本 `14.18+`，`16+`。然而，有些模板需要依赖更高的`Node` 版本才能正常运行，当你的包管理器发出警告时，请注意升级你的`Node`版本。[node版本切换](#node版本切换)
+# Use npx
 
-
-# 使用 npx
-
-无感知下载模板，无需安装`@yaoxfly/cli`。
-
-```
-npx @yaoxfly/cli@latest create  [工程名]
+No sense download template, no need to install `@yaoxfly/cli`.
 
 ```
+npx @yaoxfly/cli@latest create  [Project name]
 
-> 国内`npx`使用`npm`镜像下载可能会比慢，请切换其他镜像比如`taobao`镜像，可使用`nrm`管理,或其他方式，[镜像切换](#镜像切换)。
+```
 
-# 创建工程
+> If the `npm` image downloads slowly, please switch other image such as `taobao` image, you can use `nrm` management, or other ways, [image switch](#image-switch).
 
-你也可以下载后再使用，当前方式可提供更全面的功能,全局下载。
+
+# Creation project
+
+You can also download and then use, the current way can provide more comprehensive features, global download.
 
 ```
 npm i @yaoxfly/cli -g
 ```
 
-使用
-```
-yx-cli create [工程名]
-```
-<a id='mirrorSwitching'></a>
+use
 
+```
+yx-cli create [Project name]
+```
 
-# 添加模板
-添加自定义的模板，比如自己`GitHub`或者`Gitee`(码云)上的项目地址
+# Add template
+
+Add custom templates, such as your own `GitHub` or `Gitee` (code cloud) project address
+
 ```
 yx-cli add
 ```
 
-#### 模板地址的格式
+#### Format of the template address
 
-可以采用下面简写方式
+You can use the following shorthand
 
 ```
-GitHub - github:owner/name 或者 owner/name
+GitHub - github:owner/name or owner/name
 GitLab - gitlab:owner/name
 Bitbucket - bitbucket:owner/name
 ```
-> 1.默认是 `master` 分枝, 但你可以指定分枝和`tag` ，如 `owner/name#my-branch`。
-> 2.你还可以指定自定义来源，如`gitlab:custom.com:owner/name`. 自定义来源默认为 `https` 或 `git@` , 可自定义协议。
+> 1.The default is `master` branching, but you can specify branching and `tag`, such as `owner/name#my-branch`.
+> 2.You can also specify a custom source, such as ` gitlab:custom.com: owner/name `. Custom source default is `https` or `git@`, you can customize the protocol.
 
 
-#### Direct - direct:url方式
+#### Direct - direct:url 
 
-这种方式会跳过上面简写的方式，直接传递完整的 `url`。
+This method skips the above shorthand and passes the full `url`.
 
 ```
 direct:https://gitlab.com/flippidippi/download-git-repo-fixture.git
 ```
 
-> Gitee(码云)，私库等地址可以使用这种方式。
+> Gitee(code cloud), private library address can be used in this way.
 
-# 删除模板
+# Deleting a template
 
 ```
 yx-cli delete
 ```
 
-
-# 查看模板列表
+# Viewing the Template list
 
 ```
 yx-cli list
 ```
 
-# 镜像切换
+# image switch
 
-## 使用nrm
+## Use nrm
 
-全局下载
+Global download
 
 ```
 npm i nrm@1.0.0 -g
 ```
->`node`版本较低，高版本`nrm`可能无法使用。
+>A lower version of `node` and a higher version of `nrm` may not be available.
 
-查看镜像列表
+Viewing the image list
 
 ```
 nrm ls
 ```
 
-使用淘宝镜像
+Using Taobao image
+
 ```
 nrm use taobao
 ```
 
-## 使用npm
+## Use npm
 
-设置淘宝镜像
+Set Taobao image
 
 ```
 npm config set registry https://registry.npmmirror.com/
 ```
 
-查看是否配置成功
+> `registry.npm.taobao.org`, which was abandoned on May 31, 2022, needs to be replaced with a new `registry.npmmirror.com` source.
+
+
+Check whether the configuration is successful
+
 ```
 npm config get registry 
 ```
 
-查看npm当前配置
+View the current configuration of npm
 ```
 npm config list 
 ```
 
-设置npm镜像
+Set up an npm image
 ```
 npm config set registry https://registry.npmjs.org/
 ```
 
-##  使用.npmrc
-根目录下，创建`.npmrc`写入下面内容
+##  Use .npmrc
+In the root directory, create `.npmrc` and write the following
 
 ```
 registry= https://registry.npmmirror.com/
 ```
 
 
-# node版本切换
+# node version switch
 
-#### 使用`nvm`来管理你的`node`版本
+#### Use `nvm` to manage your `node` version
 
-[nvm下载地址](https://github.com/coreybutler/nvm-windows/releases)
+[nvm download address](https://github.com/coreybutler/nvm-windows/releases)
 
 
-下载 `nvm-setup.zip`版本，根据提示安装即可。
+Download the `vmm-setup. zip` version and install it as prompted.
 
-#### 下载node：
+#### To download node
 
-使用`nvm`命令行安装`node`时，当`node`版本为`8`以上时，`nvm`将不会安装`npm`。
+This describes only windows systems.
 
-自行在[nodejs下载网站](https://registry.npmmirror.com/binary.html?path=node)下载对应版本`zip`文件，将其解压至`nvm`安装目录的根目录下，将解压后的文件夹名 改为 `v版本号`
-例如：解压后的文件夹名：`node-v16.13.1-win-x64` 改为：`v16.13.1`完成。
+When node is installed using the `nvm` command line, `nvm` will not install `npm` when the `node` version is` 8`or higher. 
 
-查看已经下载的`node`版本
+Download the corresponding version `zip` file from the   [nodejs download website](https://registry.npmmirror.com/binary.html?path=node) and decompress it to the root directory of the `nvm` installation directory. Change the name of the decompressed folder to `v version number`
+For example, the folder name after decompression is changed from `node-v16.13.1-win-x64` to `v16.13.1`.
+
+View the downloaded version of `node`
+
 ```
 nvm list
 ```
 
-使用对应的版本
+Use the corresponding version
 ```
-nvm use [版本号]
+nvm use [Version number]
 ```
-

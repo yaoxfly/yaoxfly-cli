@@ -1,10 +1,15 @@
 {
   "vue3-simple-frame": {
     "url": "yaoxfly/vue3-simple-frame",
-    "description": "[vue3.2]、typeScript 、vite3、 pinia、 eslint、axios、mock、多环境"
+    "description": "[vue3.x]、typeScript 、vite3、pinia、eslint、axios、mock、multiple environments"
   },
   "vitepress-template": {
     "url": "yaoxfly/vitepress-template",
-    "description": "[vitepress]、typeScript、vue3、自定义主题"
+    "description": "[vitepress]、typeScript、vue3、Custom Theme"
+  },
+
+  "monorope-component": {
+    "url": "yaoxfly/monorope-component",
+    "description": "[monorope]、typeScript、vue3、vite、pnpm"
   }
 }

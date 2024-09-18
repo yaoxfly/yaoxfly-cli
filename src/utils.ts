@@ -1,14 +1,22 @@
 import { PathOrFileDescriptor, readFileSync } from 'fs'
 import ora from 'ora'
-import { exec, execSync} from 'child_process'
+import { exec, execSync } from 'child_process'
 import path from 'path'
 /**@description 读取文件,并解析JSON。
  * @author yx
  * @param  {String}  filePath 文件路径
  */
 export const readFile = (filePath: PathOrFileDescriptor) => {
-  const file = readFileSync(filePath)
-  return JSON.parse(file.toString())
+  let file = null
+  try {
+    file = readFileSync(filePath)
+    file = JSON.parse(file.toString())
+  } catch (error) {
+    file = readFileSync(filePath)
+    file = file.toString('utf-8')
+  }
+
+  return file
 }
 
 type Config = {
@@ -38,6 +46,7 @@ export const shellExec = (config: Config) => {
     exec(directive, { cwd }, (error, stdout) => {
       if (error) {
         loading && spinner.fail();
+        console.log(stdout) //更详细的失败信息
         reject(error)
         return;
       }
@@ -63,11 +72,11 @@ export const resolve = (...file) => path.resolve(__dirname, ...file)
    })
  */
 
-export const hasPackage= ()=>{
-  const fn=(tool:string)=>{
+export const hasPackage = () => {
+  const fn = (tool: string) => {
     try {
       execSync(`${tool} --version`, { stdio: 'ignore' })
-      return  true
+      return true
     } catch (e) {
       return false
     }

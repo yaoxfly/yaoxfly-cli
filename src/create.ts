@@ -7,7 +7,7 @@ import download from 'download-git-repo'
 import symbols from 'log-symbols';
 import fse from 'fs-extra'
 import { readFile, shellExec, resolve, hasPackage } from './utils'
-import { execSync} from 'child_process'
+import { execSync } from 'child_process'
 type Tips = {
   projectName?: string
   install?: boolean,
@@ -23,29 +23,29 @@ const tips = (param: Tips) => {
   console.log(`\n ${installMode === 'yarn' ? 'yarn dev' : `${installMode} run dev`} `)
 }
 
-const has=hasPackage()
-const iMode =()=>{
-  if(has('pnpm')) return 'pnpm'
-  if(has('yarn')) return 'yarn'
+const has = hasPackage()
+const iMode = () => {
+  if (has('pnpm')) return 'pnpm'
+  if (has('yarn')) return 'yarn'
   return 'npm'
 }
 
 export const create = async (projectName: string, options: any) => {
-  if(!has('git')){
+  if (!has('git')) {
     console.log(chalk.red("Error, Git is not exsits ,please install git!"))
-    return 
+    return
   }
 
-  if(has('node')){
-   let nodeVersion:string | number=  execSync(`node --version`).toString()
-   nodeVersion=  nodeVersion.substring(1,nodeVersion.length)
-   nodeVersion=parseInt(nodeVersion.split('.').join('').substring(0,4)) 
-   if(nodeVersion<1418){ //与vite版本兼容一致
-    console.log(chalk.red("Error, node version must be at least v14.18.0!"))
-    return
-   }
+  if (has('node')) {
+    let nodeVersion: string | number = execSync(`node --version`).toString()
+    nodeVersion = nodeVersion.substring(1, nodeVersion.length)
+    nodeVersion = parseInt(nodeVersion.split('.').join('').substring(0, 4))
+    if (nodeVersion < 1418) { //与vite版本兼容一致
+      console.log(chalk.red("Error, node version must be at least v14.18.0!"))
+      return
+    }
   }
-  
+
   const { force } = options || {}
   if (!force && fs.existsSync(projectName)) {
     console.log(chalk.red("Error, In this directory, the project name already exsits !"))
@@ -91,8 +91,8 @@ export const create = async (projectName: string, options: any) => {
       default: iMode(),
       choices: ['pnpm', 'npm', 'yarn'],
       when: (answers) => {
-        const { install } = answers
-        return install
+        const { install, templateName } = answers
+        return install && templateName !== 'monorope-component'
       }
     },
   ]
@@ -104,13 +104,12 @@ export const create = async (projectName: string, options: any) => {
     await fse.remove(projectName)
     spinner.succeed();
   }
-  const { templateName, description, author, install, installMode } = answers || {}
+  const { templateName, description, author, install, installMode = 'pnpm' } = answers || {}
   const url = templateObj[templateName].url
   const direct = url.split(':')[0] === 'direct'
   console.log(chalk.white('\n Start generating... \n'))
   const spinner = ora("Downloading...");
   spinner.start();
-
   download(
     url,
     projectName,
@@ -121,7 +120,6 @@ export const create = async (projectName: string, options: any) => {
         console.log(chalk.red(`Generation failed. ${err}`))
         return
       }
-
       const meta = {
         description: description,
         name: projectName.replace(/\/|\\/g, '-'),
@@ -132,6 +130,27 @@ export const create = async (projectName: string, options: any) => {
       Object.assign(packageJsonData, meta)
       fs.writeFileSync(filePath, JSON.stringify(packageJsonData, null, 2))
       spinner.succeed()
+
+      //去除gitignore忽略
+      const gitignorePath = `${projectName}/.gitignore`
+      const fileContent = readFile(`${projectName}/.gitignore`)
+      const newContent = fileContent
+        .split('\n')
+        .filter(line => !line.includes('pnpm-lock.yaml'))
+        .join('\n');
+      fs.writeFileSync(gitignorePath, newContent, 'utf-8');
+
+      try {
+        console.log(chalk.white('\n Start update... \n'))
+        const output = await execSync(`npx  npm-check-updates@16.14.20 -u --target semver  --packageManager ${installMode}`, {
+          cwd: projectName,
+          encoding: 'utf-8',
+          stdio: 'inherit'
+        });
+        output && console.log('Command output:\n', output);
+      } catch (error) {
+        console.error('Error executing command:\n', error.message);
+      }
 
       if (install) {
         const stdout = await shellExec({
@@ -144,6 +163,7 @@ export const create = async (projectName: string, options: any) => {
         tips({ projectName, install, installMode })
         return
       }
+
       tips({ projectName, install, installMode })
     }
   )
